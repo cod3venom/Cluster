@@ -1,28 +1,60 @@
-1=URL REQUIRED ERROR
-2=URL ERROR
-3=Schema ERROR
-4=INVALID SCHEMA ERROR
-5=TOO MANY REQUESTS ERROR
-6=CONNECTION TIMEOUT ERROR
-7=TIMEOUT
-8=HTTP ERROR
-9=SSL ERROR
-10=RPOXY ERROR
-11=CONNECTION ERROR
-12=HTTP EMPTY RESPONSE
-13=Nie ma takiego pliku
-14=Nazwa
-15=Xpath
-16=Cel
-17=ID
-18=https://ident.me
-19=http://localhost/silicon/?nextLink&machine=
+1#URL REQUIRED ERROR
+2#URL ERROR
+3#Schema ERROR
+4#INVALID SCHEMA ERROR
+5#TOO MANY REQUESTS ERROR
+6#CONNECTION TIMEOUT ERROR
+7#TIMEOUT
+8#HTTP ERROR
+9#SSL ERROR
+10#RPOXY ERROR
+11#CONNECTION ERROR
+12#HTTP EMPTY RESPONSE
+13#FILE NOT FOUND
+14#Title
+15#Xpath
+16#Target
+17#ID
+18#https://ident.me
+19#http://localhost/silicon/?nextLink&machine=
 20#Tor
-21#Nowy IP
-22#Zapytania
-23#Aktualny IP
-24#Nowy User-Agent
-25#Pusty odpowiedz
-26#Odpowiedz
-27#Nowy Link
-28#Egzekucja Javascript
+21#New IP
+22#REQUEST
+23#Current TOR IP
+24#New User-Agent
+25#Empty response
+26#Response
+27#New Link
+28#Executing Javascript
+29#Extracted
+30#404 not found
+31#The Web address you entered is not
+32#VALID PAGE
+33#Service Unavailable
+34# GOT MESSAGE THAT "Service is Unavailable", might we been blocked for few minutes
+35# [PATIENT] Mode has been activated
+36#errors/validateCaptcha
+37#Amazon Captcha has been detected
+38#Copying Captcha image
+39#Extracting string from image
+40#Entering extracted captcha
+41#Send captcha
+42#Captcha code has been accepted
+43#//img[contains(@src,"captcha")]/@src
+44#https
+45#http
+46#//input[contains(@id,"captchacharacters") and contains(@autocomplete,"off") and contains(@placeholder,"characters")]
+47#input[autocomplete="off"][id="captchacharacters"]
+47#[LXML] Parse error detected, keep parsing
+48#[JAVASCRIPT] Cannot read web page HEIGHT, just wait few .5 ms and execute code once again
+49#[WEBSITE STATE] We are not blocked
+50#[WEBSITE STATE] We are blocked, just wait a few seconds
+51#[BROWSER REQUESTS] Detected max retry state, just wait few seconds
+52#[BROWSER REQUESTS] Regarding to the max retry state, we are keep crawling
+53#[BROWSER RENDERER] Closing with force mechanism
+54#[XPATH] LOAD
+55#[MYSQL] EXECUTED QUERY =
+56#[TOR]
+57#NEW IP EXCEPTION
+58#CAPTCHA IS
+59#SOME DATABASE ERROR

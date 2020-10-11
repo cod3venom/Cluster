@@ -1,5 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
+from ClusterLogger import ClusterLogger
+from TxtBundler import TxtBundler
 class Stmt:
     def __init__(self):
         self.conn = mysql.connector.connect(host="localhost",database="Cortex",user="root",password="")
@@ -16,17 +18,20 @@ class Stmt:
                 self.cursor.execute(query, stack.keys(), stack.values())
                 self.Commit()
             except mysql.connector.errors.DataError as ex:
-                print(str(ex))
+                ClusterLogger(2, TxtBundler().getString(59), str(ex), "")
                 pass
     def Insert(self,query):
-        self.cursor.execute(query)
-        self.Commit()
+        try:
+            self.cursor.execute(query)
+            self.Commit()
+        except mysql.connector.errors.ProgrammingError:
+            pass
 
     def Commit(self):
         try:
             self.conn.commit()
-        except mysql.connector.Error as err:
-            print(str(err))
+        except mysql.connector.Error as ex:
+            ClusterLogger(2, TxtBundler().getString(59), str(ex), "")
         finally:
             if self.conn.is_connected():
                 self.cursor.close()

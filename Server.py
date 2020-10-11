@@ -44,7 +44,7 @@ class Server:
         pass
 
     def __cmd__(self):
-        print("COMMAND IS " + self.__stack__)
+        pass
 
     def debug(self, addr,msg):
         if addr != "" and msg != "":

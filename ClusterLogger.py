@@ -5,10 +5,11 @@ from TxtBundler import  TxtBundler
 import datetime
 
 class ClusterLogger:
-    def __init__(self,status,action,description):
+    def __init__(self,status,action,description, vendor):
         self.status = status
         self.action = str(action)
         self.description = str(description)
+        self.vendor = str(vendor)
         self.cluster_id = 0
 
         self.green = str(Fore.GREEN)
@@ -26,12 +27,15 @@ class ClusterLogger:
     def Show(self):
         Now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if self.status is not None and self.status == 1:
-            print(self.bold+"[" + self.green + " OK " + self.white + "] {}  {}".format(self.action, self.description))
+            if len(self.description) > 70:
+                print(" -- " +self.bold+"[" + self.green + " OK " + self.white + "] [ {} ] {}  {}".format(self.vendor,self.action, self.description[:70] + "..."))
+            else:
+                print(" -- " +self.bold+"[" + self.green + " OK " + self.white + "] {}  {}".format(self.action, self.description))
         if self.status is not None and self.status == 2:
-            print("\r\n"+self.bold+"[" + self.red + " FAIL " + self.white + "] {} == {} \r\n".format(self.action, self.description))
+            print("\r\n"+ " -- " + self.bold+"[" + self.red + " FAIL " + self.white + "] {} == {} \r\n".format(self.action, self.description))
         if self.status is not None and self.status == 3:
-            print("\r\n"+self.bold+"[" + self.yellow + " Warn " + self.white + "] {} == {} \r\n".format(self.action, self.description))
+            print("\r\n" " -- " ++self.bold+"[" + self.yellow + " Warn " + self.white + "] {} == {} \r\n".format(self.action, self.description))
         if self.status is not None and self.status == 4:
-            print(self.bold+"[" + self.blue + " Info " + self.white + "] {} == {}".format(self.action, self.description))
+            print(" -- " +self.bold+"[" + self.blue + " Info " + self.white + "] {} == {}".format(self.action, self.description))
 
 

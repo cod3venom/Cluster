@@ -17,3 +17,4 @@ class TxtBundler:
                         else:
                             if "#" in line:
                                 return line.split("#")[1]
+

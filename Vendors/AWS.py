@@ -2,6 +2,7 @@ from DataAccess.Stmt import Stmt
 from Strings import Strings
 from ClusterLogger import ClusterLogger
 from TxtBundler import TxtBundler
+from Logos import Logos
 import  threading
 
 class AWS:
@@ -12,8 +13,9 @@ class AWS:
         self.str = Strings()
         self.single_query = ''
         self.stacked_query = ''
-
+        self.vendor = "AMAZON"
         self.HASHID = self.str.md5ID("random")
+        self.brand = Logos()
 
 
     def DictToDb(self,query,dict):
@@ -21,7 +23,7 @@ class AWS:
 
     def QueToDb(self,query):
         Stmt().Insert(query)
-        ClusterLogger(1,TxtBundler().getString(56), query)
+        ClusterLogger(1,TxtBundler().getString(56), query,self.vendor )
 
 
     def Segregate(self,serialized=None):
@@ -29,7 +31,7 @@ class AWS:
         try:
            if serialized!=None and serialized!="":
                self.end = False
-               ClusterLogger(1,TxtBundler().getString(55), "{} = {}".format(serialized[0], str(serialized[1]).replace(r"\n","")))
+               ClusterLogger(1,TxtBundler().getString(55), "{} = {}".format(serialized[0], str(serialized[1]).replace(r"\n","")),self.vendor)
                self.keywords.SINGLE_DATA["HASHID"] = self.HASHID
                if serialized[0] == self.keywords.LINK:
                    self.keywords.SINGLE_DATA[self.keywords.LINK] = self.str.DeepCleaning(serialized[1])
