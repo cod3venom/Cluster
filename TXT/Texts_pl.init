@@ -1,0 +1,28 @@
+1=URL REQUIRED ERROR
+2=URL ERROR
+3=Schema ERROR
+4=INVALID SCHEMA ERROR
+5=TOO MANY REQUESTS ERROR
+6=CONNECTION TIMEOUT ERROR
+7=TIMEOUT
+8=HTTP ERROR
+9=SSL ERROR
+10=RPOXY ERROR
+11=CONNECTION ERROR
+12=HTTP EMPTY RESPONSE
+13=Nie ma takiego pliku
+14=Nazwa
+15=Xpath
+16=Cel
+17=ID
+18=https://ident.me
+19=http://localhost/silicon/?nextLink&machine=
+20#Tor
+21#Nowy IP
+22#Zapytania
+23#Aktualny IP
+24#Nowy User-Agent
+25#Pusty odpowiedz
+26#Odpowiedz
+27#Nowy Link
+28#Egzekucja Javascript
