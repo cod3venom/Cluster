@@ -54,3 +54,4 @@
 53#[BROWSER RENDERER] Closing with force mechanism
 54#[XPATH] LOAD
 55#[MYSQL] EXECUTED QUERY =
+56#[Cluster] TERMINATED BY USER
