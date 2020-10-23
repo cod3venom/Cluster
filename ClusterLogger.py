@@ -28,7 +28,7 @@ class ClusterLogger:
         Now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if self.status is not None and self.status == 1:
             if len(self.description) > 70:
-                print(" -- " +self.bold+"[" + self.green + " OK " + self.white + "] [ {} ] {}  {}".format(self.vendor,self.action, self.description[:70] + "..."))
+                print(" -- " +self.bold+"[" + self.green + " OK " + self.white + "] [ {} ] {}  {}".format(self.vendor,self.action, self.description + "..."))
             else:
                 print(" -- " +self.bold+"[" + self.green + " OK " + self.white + "] {}  {}".format(self.action, self.description))
         if self.status is not None and self.status == 2:

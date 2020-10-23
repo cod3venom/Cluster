@@ -4,7 +4,7 @@ from ClusterLogger import ClusterLogger
 from TxtBundler import TxtBundler
 class Stmt:
     def __init__(self):
-        self.conn = mysql.connector.connect(host="localhost",database="Cortex",user="root",password="")
+        self.conn = mysql.connector.connect(host="46.242.131.170",database="PGP",user="venom",password="pirate0013")
         self.cursor = self.conn.cursor()
 
     def __del__(self):
