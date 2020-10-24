@@ -7,11 +7,12 @@ class Commander:
         self.vend  = VENDORS()
 
     def handler(self,input):
-        com = self.str.entryCOM(input)
+        com = self.str.entryCOM(input)[0]
+
         if com == self.vend.AWS:
             self.map.aws_map(input)
+
         if com == self.vend.PGP:
-            print("ACCEPT")
             self.map.pgp_map(input)
 
 

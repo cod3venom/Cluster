@@ -31,7 +31,6 @@ class Server:
 
     def ListenU(self, model):
         while self.stop == False:
-            print("listen")
             __RECV__ = model.recvfrom(__config__.__BUFFER__)
             self.__ip__ = __RECV__[1]
             self.__stack__ = __RECV__[0]

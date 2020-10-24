@@ -2,9 +2,15 @@ from hashlib import md5
 import time
 class Strings:
     blacklist = ["'","\n","\"", "\\n", 'Brand:']
-    deepblacklist = ["]","[", ",","\"", "AWS!", ' ',"",'  ']
+
+    #@TODO: WHEN ADD NEW VENDOR
+    #@TODO: NEED TO ADD ITS NAME ALSO IN THE VARIABLE [deepblacklist]
+
+    deepblacklist = ["]","[", "\"","'", "AWS!","PGP!", 'Marke:','Brand:', 'Store: ', '_n', '\\xa0']
+
     entryCOM_del =  '!'
-    emptylist = [" ","","   ", "      ",]
+
+    emptylist = ["  ","   ", "      ",]
 
 
     def Clean(self,data):
@@ -44,7 +50,7 @@ class Strings:
         out = ''
         if data is not None and self.entryCOM_del in data:
             try:
-                out = data.split(self.entryCOM_del)[0]
+                out = data.split(self.entryCOM_del)
             except IndexError:
                 pass
         return out

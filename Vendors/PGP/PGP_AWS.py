@@ -6,7 +6,8 @@ from Logos import Logos
 import  threading
 
 class PGP_AWS:
-    second = {}
+
+
     def __init__(self):
         self.keywords = AWSKeywords()
         self.end = False
@@ -25,29 +26,30 @@ class PGP_AWS:
         Stmt().Insert(query)
         ClusterLogger(1,TxtBundler().getString(56), query,self.vendor )
 
-
     def Segregate(self,serialized:dict) ->int:
-
         try:
             if serialized!=None and serialized!="":
                 self.end = False
                 ClusterLogger(1,TxtBundler().getString(55), "{} = {}".format(serialized[0], str(serialized[1]).replace(r"\n","")),self.vendor)
+
                 self.keywords.SINGLE_DATA["HASHID"] = self.HASHID
                 if serialized[0] == self.keywords.LINK:
                     self.keywords.SINGLE_DATA[self.keywords.LINK] = self.str.DeepCleaning(serialized[1])
+
                 if serialized[0] == self.keywords.TITLE:
                     self.keywords.SINGLE_DATA[self.keywords.TITLE] = self.str.DeepCleaning(serialized[1])
-                elif serialized[0] == self.keywords.SELLER:
+
+                if serialized[0] == self.keywords.SELLER:
                     self.keywords.SINGLE_DATA[self.keywords.SELLER] = self.str.DeepCleaning(serialized[1])
-                elif serialized[0] == self.keywords.SELLER_LINK:
+
+                if serialized[0] == self.keywords.SELLER_LINK:
                     self.keywords.SINGLE_DATA[self.keywords.SELLER_LINK] = self.str.DeepCleaning(serialized[1])
-                elif serialized[0] == self.keywords.OFFER_PRICE:
+
+                if serialized[0] == self.keywords.OFFER_PRICE:
                     self.keywords.SINGLE_DATA[self.keywords.OFFER_PRICE] = self.str.DeepCleaning(serialized[1])
 
-
-                elif serialized[0] == self.keywords.OFFER_DELIVERY_INFO:
+                if serialized[0] == self.keywords.OFFER_DELIVERY_INFO:
                     self.keywords.SINGLE_DATA[self.keywords.OFFER_DELIVERY_INFO] = self.str.DeepCleaning(serialized[1])
-
                 elif serialized[0] == self.keywords.OFFER_SHORT_DESCRIPTION:
                     self.keywords.SINGLE_DATA[self.keywords.OFFER_SHORT_DESCRIPTION] = self.str.DeepCleaning(serialized[1])
 
@@ -79,49 +81,18 @@ class PGP_AWS:
                     self.keywords.SINGLE_DATA[self.keywords.PRODUCT_BEST_SELLERS_RANK] = self.str.DeepCleaning(serialized[1])
 
 
-
         except IndexError:
             pass
         finally:
-            if serialized==None and self.keywords.SINGLE_DATA[self.keywords.TITLE] != "":
-                self.finalize()
-
-    """
-        INSERT INTO DATABASE DICT TYPE DATA
-    """
-    def STACKED_INSERT(self, stack,table,col1,col2):
-        if stack!=None and len(stack) > 0:
             try:
-                stack = str(stack).replace("'",",").replace(",,",",")
-                if "," in stack:
-                    stacked = stack.split(",")
-                    for pointer in stacked:
-                        if len(pointer) > 10:
-                            self.stacked_query = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID,pointer)
-                            self.QueToDb(self.stacked_query)
-            except IndexError:
+                if serialized==None and self.keywords.SINGLE_DATA[self.keywords.LINK] != "":
+                    print("          "+str(self.keywords.SINGLE_DATA))
+                    self.finalize()
+            except KeyError:
                 pass
 
 
-    def PriceInsert(self,pack,table,col1,col2):
-        if pack != None and "'" in pack:
-            pack = str(pack).replace("'",",").replace(", ,",",")
-            if pack != '' and pack!=',':
-                pack = pack.split(",")
-                for packet in pack:
-                    if packet != "":
-                        self.keywords.CUSTOMER_WHO_REVIEWED_PRICE_QUERY = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID, packet)
-                        self.QueToDb(self.keywords.CUSTOMER_WHO_REVIEWED_PRICE_QUERY)
 
-    def RatingInsert(self, pack, table,col1,col2):
-        if pack != None and table != "" and col1 != "" and col2 != "":
-            if "'" in pack:
-                pack = str(pack).replace("'",",").replace(",,",",").replace(pack[:1],"")
-                pack = pack.split(",")
-                for rating in pack:
-                    if rating !="":
-                        self.keywords.CUSTOMER_WHO_REVIEWED_RATING_QUERY = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID, rating)
-                        self.QueToDb(self.keywords.CUSTOMER_WHO_REVIEWED_RATING_QUERY)
 
     def finalize(self):
         self.end = True
@@ -143,10 +114,9 @@ class AWSQuery:
     def dictToSql(self,serialized):
         table='AWS_PGP_OFFERS'
         columns = ', '.join("`" + str(x).replace('/', '_') + "`" for x in serialized.keys())
-        values = ', '.join('"' + str(x).replace('/', '_') + '"' for x in serialized.values())
-        return "INSERT INTO %s ( %s ) " \
-               "VALUES " \
-               "( %s );" % (table, columns, values)
+        values = ', '.join('"' + str(x).replace('\\', '_') + '"' for x in serialized.values())
+        query = "INSERT INTO %s ( %s ) VALUES ( %s );" % (table, columns, values)
+        return  query
 
     def StackedLinksQuery(self,table,col1,col2,param1,param2):
         data = 'INSERT INTO {} (`{}`,`{}`) VALUES ("{}","{}");'.format(table,col1,col2,param1,param2)
@@ -172,6 +142,7 @@ class AWSKeywords:
     PRODUCT_ASIN="PRODUCT_ASIN"
     PRODUCT_RATINGS="PRODUCT_RATINGS"
     PRODUCT_BEST_SELLERS_RANK="PRODUCT_BEST_SELLERS_RANK"
+
 
     SINGLE_DATA = {
 
