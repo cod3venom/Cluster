@@ -23,7 +23,7 @@ class AWS:
 
     def QueToDb(self,query):
         Stmt().Insert(query)
-        ClusterLogger(1,TxtBundler().getString(56), query,self.vendor )
+        ClusterLogger(1,TxtBundler().getString(56) + "\r\n\r\n", query,self.vendor )
 
 
     def Segregate(self,serialized=None):
@@ -60,21 +60,37 @@ class AWS:
 
 
                elif serialized[0] == self.keywords.CUSTOMERS_WHO_REVIEWED_LINK:
-                    self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.AWS_CUSTOMERS_WHO_REVIEWED_LINK, self.keywords.HASHID, self.keywords.LINK)
+                    self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.CUSTOMERS_WHO_REVIEWED_LINK, self.keywords.HASHID, self.keywords.LINK)
 
                elif serialized[0] == self.keywords.CUSTOMERS_WHO_REVIEWED_IMAGE:
-                    self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.AWS_CUSTOMERS_WHO_REVIEWED_IMAGE, self.keywords.HASHID, self.keywords.IMAGE)
+                    self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.CUSTOMERS_WHO_REVIEWED_IMAGE, self.keywords.HASHID, self.keywords.IMAGE)
 
                elif serialized[0] == self.keywords.CUSTOMERS_WHO_REVIEWED_TITLE:
-                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.AWS_CUSTOMERS_WHO_REVIEWED_TITLE, self.keywords.HASHID, self.keywords.TITLE)
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.CUSTOMERS_WHO_REVIEWED_TITLE, self.keywords.HASHID, self.keywords.TITLE)
 
                elif serialized[0] == self.keywords.CUSTOMERS_WHO_REVIEWED_PRICE:
-                   self.PriceInsert(serialized[1],self.keywords.AWS_CUSTOMERS_WHO_REVIEWED_PRICE, self.keywords.HASHID, self.keywords.PRICE)
-
+                   self.STACKED_INSERT(serialized[1],self.keywords.CUSTOMERS_WHO_REVIEWED_PRICE, self.keywords.HASHID, self.keywords.PRICE)
 
                elif serialized[0] == self.keywords.CUSTOMERS_WHO_REVIEWED_STARS:
-                   self.RatingInsert(self.str.DeepCleaning(serialized[1]),self.keywords.AWS_CUSTOMERS_WHO_REVIEWED_STARS, self.keywords.HASHID, self.keywords.STARS)
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.CUSTOMERS_WHO_REVIEWED_STARS, self.keywords.HASHID, self.keywords.STARS)
 
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER, self.keywords.HASHID, self.keywords.USERNAME)
+
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER_LINK:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER_LINK, self.keywords.HASHID, self.keywords.Link)
+
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER_AVATAR:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER_AVATAR, self.keywords.HASHID, self.keywords.AVATAR)
+
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER_STARS:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER_STARS, self.keywords.HASHID, self.keywords.STARS)
+
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER_LOCATION_DATE:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER_LOCATION_DATE, self.keywords.HASHID, self.keywords.DATE)
+
+               elif serialized[0] == self.keywords.PRODUCT_REVIEW_USER_COMMENT:
+                   self.STACKED_INSERT(self.str.DeepCleaning(serialized[1]),self.keywords.PRODUCT_REVIEW_USER_COMMENT, self.keywords.HASHID, self.keywords.COMMENT)
 
         except IndexError:
             pass
@@ -82,9 +98,7 @@ class AWS:
             if serialized==None and self.keywords.SINGLE_DATA[self.keywords.TITLE] != "":
                 self.finalize()
 
-    """
-        INSERT INTO DATABASE DICT TYPE DATA
-    """
+
     def STACKED_INSERT(self, stack,table,col1,col2):
         if stack!=None and len(stack) > 0:
             try:
@@ -92,9 +106,8 @@ class AWS:
                 if "," in stack:
                     stacked = stack.split(",")
                     for pointer in stacked:
-                        if len(pointer) > 10:
-                            self.stacked_query = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID,pointer)
-                            self.QueToDb(self.stacked_query)
+                        self.stacked_query = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID,pointer)
+                        self.QueToDb(self.stacked_query)
             except IndexError:
                 pass
 
@@ -119,6 +132,8 @@ class AWS:
                         self.keywords.CUSTOMER_WHO_REVIEWED_RATING_QUERY = AWSQuery().StackedLinksQuery(table,col1,col2,self.HASHID, rating)
                         self.QueToDb(self.keywords.CUSTOMER_WHO_REVIEWED_RATING_QUERY)
 
+
+
     def finalize(self):
         self.end = True
         self.single_query = AWSQuery().dictToSql(self.keywords.SINGLE_DATA)
@@ -137,7 +152,7 @@ class AWSQuery:
      DICTIONARY TYPE DATA INTO MYSQL QUERY
     """
     def dictToSql(self,serialized):
-        table='AWS_PRODUCTS'
+        table='PRODUCTS'
         columns = ', '.join("`" + str(x).replace('/', '_') + "`" for x in serialized.keys())
         values = ', '.join('"' + str(x).replace('/', '_') + '"' for x in serialized.values())
         return "INSERT INTO %s ( %s ) " \
@@ -151,6 +166,7 @@ class AWSQuery:
 
 
 class AWSKeywords:
+    HASHID='HASHID'
     LINK ="LINK"
     TITLE="TITLE"
     SELLER="SELLER"
@@ -181,18 +197,6 @@ class AWSKeywords:
     SINGLE_DATA = {
 
     }
-    STACKED_DATA = {
-        "QUEUEID":{}, "TITLE":{}, "SELLER":{},"SELLER_LINK":{}, "OFFER_RATING":{},
-        "OFFER_TOTAL_RATING":{},"OFFER_PRICE":{}, "OFFER_SHIPPING_INFO":{},
-        "OFFER_SHORT_DESCRIPTION":{},"CUSTOMERS_WHO_REVIEWED_TITLE":{},
-        "CUSTOMERS_WHO_REVIEWED_LINK":{},"CUSTOMERS_WHO_REVIEWED_IMAGE":{},
-        "CUSTOMERS_WHO_REVIEWED_STARS":{},"CUSTOMERS_WHO_REVIEWED_PRICE":{},
-        "PRODUCT_INFO_TABLE_KEY":{},"PRODUCT_INFO_TABLE_VALUE":{},
-        "PRODUCT_DESCRIPTION":{}, "PRODUCT_FROM_MANUFACTURER":{},
-        "PRODUCT_REVIEW_USER":{}, "PRODUCT_REVIEW_USER_LINK":{},
-        "PRODUCT_REVIEW_USER_AVATAR":{}, "PRODUCT_REVIEW_USER_STARS":{},
-        "PRODUCT_REVIEW_USER_LOCATION_DATE":{}, "PRODUCT_REVIEW_USER_COMMENT":{}
-    }
 
     REVIEW_LINKS = []
 
@@ -202,11 +206,13 @@ class AWSKeywords:
         TABLE NAME DEFINITIONS
     """
 
-    AWS_CUSTOMERS_WHO_REVIEWED_TITLE="AWS_CUSTOMERS_WHO_REVIEWED_TITLE"
-    AWS_CUSTOMERS_WHO_REVIEWED_LINK="AWS_CUSTOMERS_WHO_REVIEWED_LINK"
-    AWS_CUSTOMERS_WHO_REVIEWED_IMAGE="AWS_CUSTOMERS_WHO_REVIEWED_IMAGE"
-    AWS_CUSTOMERS_WHO_REVIEWED_STARS="AWS_CUSTOMERS_WHO_REVIEWED_STARS"
-    AWS_CUSTOMERS_WHO_REVIEWED_PRICE="AWS_CUSTOMERS_WHO_REVIEWED_PRICE"
+    CUSTOMERS_WHO_REVIEWED_TITLE="CUSTOMERS_WHO_REVIEWED_TITLE"
+    CUSTOMERS_WHO_REVIEWED_LINK="CUSTOMERS_WHO_REVIEWED_LINK"
+    CUSTOMERS_WHO_REVIEWED_IMAGE="CUSTOMERS_WHO_REVIEWED_IMAGE"
+    CUSTOMERS_WHO_REVIEWED_STARS="CUSTOMERS_WHO_REVIEWED_STARS"
+    CUSTOMERS_WHO_REVIEWED_PRICE="CUSTOMERS_WHO_REVIEWED_PRICE"
+
+    PRODUCT_REVIEW_USER = "PRODUCT_REVIEW_USER"
 
     """
         COLUMN NAME DEFINITIONS
@@ -214,9 +220,15 @@ class AWSKeywords:
     IMAGE = "IMAGE"
     PRICE = "PRICE"
     STARS = "STARS"
+    COMMENT = 'COMMENT'
+    DATE = 'DATE'
+    AVATAR = 'AVATAR'
+    USERNAME = 'USERNAME'
+    Link = 'LINK'
 
     """
         EMPTY QUERY INITIALIZATIONS
     """
     CUSTOMER_WHO_REVIEWED_PRICE_QUERY = ''
     CUSTOMER_WHO_REVIEWED_RATING_QUERY = ''
+    PRODUCT_REVIEW_USER_QUERY = ''
